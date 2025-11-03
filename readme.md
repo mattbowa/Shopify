@@ -29,24 +29,80 @@ shopify/
 
 ## Setup
 
-1. Install dependencies:
+### Local Development
+
+#### Quick Start
+
+1. **Install dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Create `.env` file with:
-```
-SHOPIFY_API_KEY=your_api_key
-SHOPIFY_API_SECRET=your_api_secret
-APP_URL=https://your-app-url.ngrok-free.app
+2. **Create `.env` file** (copy from `.env.example`):
+```bash
+cp .env.example .env
 ```
 
-3. Run the application:
+Then edit `.env` with your actual values:
+```
+SHOPIFY_API_KEY=your_shopify_api_key
+SHOPIFY_API_SECRET=your_shopify_api_secret
+APP_URL=http://localhost:8000
+```
+
+**For OAuth to work locally, you need ngrok or similar:**
+```bash
+# Install ngrok (if not installed)
+# Then run:
+ngrok http 8000
+# Use the ngrok URL for APP_URL in .env
+```
+
+3. **Run the application:**
+
+**Option 1: Using run.py (recommended)**
 ```bash
 python run.py
-# or
-uvicorn app.main:app --reload
 ```
+
+**Option 2: Using uvicorn directly**
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+**Option 3: Using Docker locally**
+```bash
+docker build -t shopify-seo-checker .
+docker run -p 8000:8000 --env-file .env shopify-seo-checker
+```
+
+4. **Access the API:**
+- API docs: http://localhost:8000/docs
+- Root: http://localhost:8000/
+- All endpoints available at http://localhost:8000
+
+### Deployment to Railway (Docker)
+
+1. **Push your code to GitHub** (if not already)
+
+2. **Create Railway account** at [railway.app](https://railway.app)
+
+3. **Create new project** and select "Deploy from GitHub repo"
+
+4. **Set environment variables** in Railway dashboard:
+   - `SHOPIFY_API_KEY` - Your Shopify API key
+   - `SHOPIFY_API_SECRET` - Your Shopify API secret
+   - `APP_URL` - Your Railway app URL (Railway provides this)
+
+5. **Railway will automatically:**
+   - Detect the `Dockerfile`
+   - Build the container
+   - Deploy the application
+   - Set the `PORT` environment variable automatically
+
+6. **Your app will be live** at `https://your-app-name.railway.app`
+
+**Note:** Railway automatically uses the Dockerfile for container-based deployment. The container includes all dependencies and runs FastAPI with Uvicorn.
 
 ## API Endpoints
 
