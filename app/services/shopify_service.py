@@ -6,7 +6,7 @@ from app.core.database import get_token
 
 
 class ShopifyService:
-    """Service class for Shopify API operations."""
+    """Service class for Shopify API operations"""
     
     API_VERSION = "2025-01"
     
